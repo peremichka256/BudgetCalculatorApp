@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCalculatorApp", "Budg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetCalculatorAppUnitTests", "BudgetCalculatorAppUnitTests\BudgetCalculatorAppUnitTests.csproj", "{48EF5D42-81B7-456B-9D45-E88B98B7BD96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBWrapper", "DBWrapper\DBWrapper.csproj", "{5798FAD7-2240-4F8F-868A-593A65831A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBWrapper", "DBWrapper\DBWrapper.csproj", "{5798FAD7-2240-4F8F-868A-593A65831A7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
