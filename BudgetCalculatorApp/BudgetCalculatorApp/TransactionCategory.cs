@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BudgetCalculatorApp
 {
@@ -20,7 +16,7 @@ namespace BudgetCalculatorApp
         /// <summary>
         /// Тип категории
         /// </summary>
-        private TransactionType _type;
+        private TransactionTypes _type;
 
         /// <summary>
         /// Первичный ключ категории
@@ -43,7 +39,7 @@ namespace BudgetCalculatorApp
         /// <summary>
         /// Передаёт или задёт категорию транзакции
         /// </summary>
-        public TransactionType Type
+        public TransactionTypes Type
         {
             get => _type;
             set => _type = value;
@@ -54,10 +50,15 @@ namespace BudgetCalculatorApp
         /// </summary>
         /// <param name="name">Название категории</param>
         /// <param name="type">Тиа приход/расход</param>
-        public TransactionCategory(string name, TransactionType type)
+        public TransactionCategory(string name, TransactionTypes type)
         {
             Name = name;
             Type = type;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

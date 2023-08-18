@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace BudgetCalculatorApp
 {
@@ -75,7 +70,7 @@ namespace BudgetCalculatorApp
                 {
                     throw new Exception("Value should be more that" +
                                         " zero, for expense transaction is" +
-                                        " used TransactionType");
+                                        " used TransactionTypes");
                 }
 
                 _value = value;

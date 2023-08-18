@@ -1,9 +1,5 @@
-﻿using System;
-using System.Data;
-using BudgetCalculatorApp;
+﻿using BudgetCalculatorApp;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace DBWrapper
 {
