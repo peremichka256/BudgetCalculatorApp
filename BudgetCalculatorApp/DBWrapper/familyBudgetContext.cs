@@ -19,8 +19,7 @@ namespace DBWrapper
         {
         }
 
-        public virtual DbSet<ArrivalCategories> ArrivalCategories { get; set; }
-        public virtual DbSet<ExpenseCategories> ExpenseCategories { get; set; }
+        public virtual DbSet<TransactionCategories> TransactionCategories { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
@@ -35,30 +34,19 @@ namespace DBWrapper
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ArrivalCategories>(entity =>
-            {
-                entity.HasKey(e => e.CategoryId);
-            });
-
-            modelBuilder.Entity<ExpenseCategories>(entity =>
-            {
-                entity.HasKey(e => e.CategoryId);
-            });
-
             modelBuilder.Entity<Transactions>(entity =>
             {
-                entity.HasKey(e => e.TransactionId);
+                entity.HasIndex(e => e.CategoryId);
 
-                entity.HasIndex(e => e.UserTransactionId);
+                entity.HasIndex(e => e.UserId);
 
-                entity.HasOne(d => d.UserTransaction)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Transactions)
-                    .HasForeignKey(d => d.UserTransactionId);
-            });
+                    .HasForeignKey(d => d.CategoryId);
 
-            modelBuilder.Entity<Users>(entity =>
-            {
-                entity.HasKey(e => e.TransactionId);
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.UserId);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,18 +14,10 @@ namespace BudgetCalculatorApp
     /// </summary>
     public class Transaction
     {
-        [Key]
-        public int TransactionId { get; set; }
-
-        /// <summary>
-        /// Тип транзакции
-        /// </summary>
-        private TransactionType _type;
-
         /// <summary>
         /// Категория транзакции
         /// </summary>
-        private ITransactionCategory _category;
+        private TransactionCategory _category;
 
         /// <summary>
         /// Размер транзакции
@@ -37,40 +30,37 @@ namespace BudgetCalculatorApp
         private DateTime _dateTime;
 
         /// <summary>
-        /// Передаёт или задаёт тип транзакции
+        /// Первичный ключ транзакции
         /// </summary>
-        public TransactionType Type
-        {
-            get => _type;
-        }
+        [Key]
+        public int Id { get; set; }
 
         /// <summary>
-        /// Передаёт или задаёт категорию транзакции
-        /// </summary>
-        public ITransactionCategory Category
-        {
-            get => _category;
-        }
-
-        /// <summary>
-        /// Метод который устанавливает категорию
+        /// Передаёт или задаёт категорию
         /// транзакции исходя из её типа
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="category"></param>
-        public void SetTypeAndCategory(TransactionType type, string category)
+        public TransactionCategory Category
         {
-            _type = type;
-
-            if (_type is TransactionType.Arrival)
-            {
-                _category = new ArrivalCategory(category);
-            }
-            else if (_type is TransactionType.Expense)
-            {
-                _category = new ExpenseCategory(category);
-            }
+            get => _category;
+            set => _category = value;
         }
+
+        /// <summary>
+        /// Внешний ключ для связи с категорией транзакции
+        /// </summary>
+        [ForeignKey("CategoryId")]
+        public int CategoryId { get; set; }
+
+        /// <summary>
+        /// Передаёт или задаёт пользователя транзакции
+        /// </summary>
+        public User User { get; set; }
+
+        /// <summary>
+        /// Внешний ключ для связи с пользователем
+        /// </summary>
+        [ForeignKey("UserId")]
+        public int UserId { get; set; }
 
         /// <summary>
         /// Передаёт или задаёт размер транзакции
@@ -108,14 +98,18 @@ namespace BudgetCalculatorApp
         /// <param name="category">Категория</param>
         /// <param name="value">Размер</param>
         /// <param name="dateTime">Время</param>
-        public Transaction(TransactionType type, 
-            string category, double value, DateTime dateTime)
+        public Transaction(TransactionCategory category, double value,
+            DateTime dateTime)
         {
-            SetTypeAndCategory(type, category);
+            Category = category;
+            CategoryId = category.Id;
             Value = value;
             DateTime = dateTime;
         }
 
+        /// <summary>
+        /// Пустой конструктор
+        /// </summary>
         public Transaction()
         {
 

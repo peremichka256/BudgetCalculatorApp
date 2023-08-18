@@ -14,7 +14,7 @@ namespace DBWrapper
             Transactions = new HashSet<Transactions>();
         }
 
-        public int TransactionId { get; set; }
+        public int Id { get; set; }
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public DateTime BirthDate { get; set; }

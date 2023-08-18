@@ -14,7 +14,7 @@ namespace BudgetCalculatorApp
     public class User
     {
         [Key]
-        public int TransactionId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Имя пользователя
@@ -30,11 +30,6 @@ namespace BudgetCalculatorApp
         /// Дата рождения
         /// </summary>
         private DateTime _birthDate;
-
-        /// <summary>
-        /// Список всех транзакций
-        /// </summary>
-        private List<Transaction> _transactions = new List<Transaction>();
 
         /// <summary>
         /// Передаёт или задаёт имя пользователя
@@ -66,10 +61,8 @@ namespace BudgetCalculatorApp
         /// <summary>
         /// Список транзакций пользователя
         /// </summary>
-        public List<Transaction> Transactions
-        {
-            get => _transactions;
-        }
+        public List<Transaction> Transactions { get; set; } 
+            = new List<Transaction>();
 
         /// <summary>
         /// Добавляет транзакцию в список пользователя
@@ -78,6 +71,7 @@ namespace BudgetCalculatorApp
         public void AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
+            transaction.UserId = Id; // Устанавливаем внешний ключ
         }
 
         /// <summary>
@@ -87,6 +81,16 @@ namespace BudgetCalculatorApp
         public void RemoveTransaction(Transaction transaction)
         {
             Transactions.Remove(transaction);
+        }
+
+        /// <summary>
+        /// Метод расчитывающий итоговый вклад пользователя в бюджет
+        /// </summary>
+        /// <returns>Сумма расходов и приходов пользователя</returns>
+        public double Calculate()
+        {
+            //TODO: LINQ
+            return 0;
         }
 
         /// <summary>

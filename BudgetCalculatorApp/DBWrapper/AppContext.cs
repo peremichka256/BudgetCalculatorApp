@@ -31,14 +31,9 @@ namespace DBWrapper
         public DbSet<Transaction> Transactions { get; set; }
 
         /// <summary>
-        /// Набор данных для доступа к таблице категорий расходных транзакций
+        /// Набор данных для доступа к таблице категорий транзакций
         /// </summary>
-        public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
-
-        /// <summary>
-        /// Набор данных для доступа к таблице категорий приходных транзакций
-        /// </summary>
-        public DbSet<ArrivalCategory> ArrivalCategories { get; set; }
+        public DbSet<TransactionCategory> TransactionCategories { get; set; }
 
         /// <summary>
         /// Метод для настройки подключения к базе данных
@@ -47,6 +42,35 @@ namespace DBWrapper
         {
             //Установка подключения к БД
             optionsBuilder.UseNpgsql(CONNECTION_STRING);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
+
+            modelBuilder.Entity<Transaction>()
+                .HasKey(t => t.Id);
+
+            modelBuilder.Entity<TransactionCategory>()
+                .HasKey(tc => tc.Id);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Transactions)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.Category)
+                .WithMany(tc => tc.Transactions)
+                .HasForeignKey(t => t.CategoryId);
         }
     }
 }
