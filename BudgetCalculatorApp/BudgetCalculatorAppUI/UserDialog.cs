@@ -4,6 +4,9 @@ using BudgetCalculatorApp;
 
 namespace BudgetCalculatorAppUI
 {
+    /// <summary>
+    /// Форма для редактирования и добавления пользователя
+    /// </summary>
     public partial class UserDialog : Form
     {
         /// <summary>

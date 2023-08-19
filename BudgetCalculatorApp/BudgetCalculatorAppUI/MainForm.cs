@@ -427,6 +427,11 @@ namespace BudgetCalculatorAppUI
                 MessageBox.Show(reportMessage, "Финансовый отчёт",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            else if (_selectedUser == null)
+            {
+                var chartForm = new ChartForm(_context);
+                chartForm.Show();
+            }
         }
     }
 }

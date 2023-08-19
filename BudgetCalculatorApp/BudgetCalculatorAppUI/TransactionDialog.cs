@@ -7,6 +7,9 @@ using AppContext = DBWrapper.AppContext;
 
 namespace BudgetCalculatorAppUI
 {
+    /// <summary>
+    /// Форма предназначенная для добавления и редактирования транзакции
+    /// </summary>
     public partial class TransactionDialog : Form
     {
         /// <summary>
