@@ -30,18 +30,20 @@ namespace BudgetCalculatorAppUI
         private void InitializeComponent()
         {
             this.controlPanel = new System.Windows.Forms.Panel();
+            this.goBackButton = new System.Windows.Forms.Button();
             this.ReoirtButton = new System.Windows.Forms.Button();
             this.entryEditingButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.userDataPanel = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.userDataLabel = new System.Windows.Forms.Label();
             this.userFirstnameLabel = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.goBackButton = new System.Windows.Forms.Button();
             this.controlPanel.SuspendLayout();
             this.userDataPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,6 +62,23 @@ namespace BudgetCalculatorAppUI
             this.controlPanel.Name = "controlPanel";
             this.controlPanel.Size = new System.Drawing.Size(200, 515);
             this.controlPanel.TabIndex = 0;
+            // 
+            // goBackButton
+            // 
+            this.goBackButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.goBackButton.FlatAppearance.BorderSize = 0;
+            this.goBackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.goBackButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.goBackButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.goBackButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.goBackButton.Location = new System.Drawing.Point(0, 169);
+            this.goBackButton.Name = "goBackButton";
+            this.goBackButton.Size = new System.Drawing.Size(200, 23);
+            this.goBackButton.TabIndex = 7;
+            this.goBackButton.Text = "Назад";
+            this.goBackButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.goBackButton.UseVisualStyleBackColor = true;
+            this.goBackButton.Click += new System.EventHandler(this.goBackButton_Click);
             // 
             // ReoirtButton
             // 
@@ -84,7 +103,7 @@ namespace BudgetCalculatorAppUI
             this.entryEditingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.entryEditingButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.entryEditingButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.entryEditingButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.entryEditingButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.entryEditingButton.Location = new System.Drawing.Point(0, 146);
             this.entryEditingButton.Name = "entryEditingButton";
             this.entryEditingButton.Size = new System.Drawing.Size(200, 23);
@@ -118,7 +137,7 @@ namespace BudgetCalculatorAppUI
             this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.removeButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.removeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.removeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.removeButton.Location = new System.Drawing.Point(0, 123);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(200, 23);
@@ -135,7 +154,7 @@ namespace BudgetCalculatorAppUI
             this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.addButton.Location = new System.Drawing.Point(0, 100);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(200, 23);
@@ -147,6 +166,7 @@ namespace BudgetCalculatorAppUI
             // 
             // userDataPanel
             // 
+            this.userDataPanel.Controls.Add(this.pictureBox1);
             this.userDataPanel.Controls.Add(this.userDataLabel);
             this.userDataPanel.Controls.Add(this.userFirstnameLabel);
             this.userDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -154,6 +174,17 @@ namespace BudgetCalculatorAppUI
             this.userDataPanel.Name = "userDataPanel";
             this.userDataPanel.Size = new System.Drawing.Size(200, 100);
             this.userDataPanel.TabIndex = 0;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pictureBox1.Image = global::BudgetCalculatorAppUI.Properties.Resources.user;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 32);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(200, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
             // 
             // userDataLabel
             // 
@@ -167,6 +198,7 @@ namespace BudgetCalculatorAppUI
             this.userDataLabel.Size = new System.Drawing.Size(200, 16);
             this.userDataLabel.TabIndex = 2;
             this.userDataLabel.Text = "User Data";
+            this.userDataLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // userFirstnameLabel
             // 
@@ -180,6 +212,7 @@ namespace BudgetCalculatorAppUI
             this.userFirstnameLabel.Size = new System.Drawing.Size(200, 16);
             this.userFirstnameLabel.TabIndex = 1;
             this.userFirstnameLabel.Text = "User Name";
+            this.userFirstnameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // dataGridView
             // 
@@ -190,23 +223,6 @@ namespace BudgetCalculatorAppUI
             this.dataGridView.TabIndex = 1;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
-            // 
-            // goBackButton
-            // 
-            this.goBackButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.goBackButton.FlatAppearance.BorderSize = 0;
-            this.goBackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.goBackButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.goBackButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.goBackButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.goBackButton.Location = new System.Drawing.Point(0, 169);
-            this.goBackButton.Name = "goBackButton";
-            this.goBackButton.Size = new System.Drawing.Size(200, 23);
-            this.goBackButton.TabIndex = 7;
-            this.goBackButton.Text = "Назад";
-            this.goBackButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.goBackButton.UseVisualStyleBackColor = true;
-            this.goBackButton.Click += new System.EventHandler(this.goBackButton_Click);
             // 
             // MainForm
             // 
@@ -222,6 +238,7 @@ namespace BudgetCalculatorAppUI
             this.Text = "Form1";
             this.controlPanel.ResumeLayout(false);
             this.userDataPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
@@ -240,6 +257,7 @@ namespace BudgetCalculatorAppUI
         private System.Windows.Forms.Button entryEditingButton;
         private System.Windows.Forms.Button ReoirtButton;
         private System.Windows.Forms.Button goBackButton;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
