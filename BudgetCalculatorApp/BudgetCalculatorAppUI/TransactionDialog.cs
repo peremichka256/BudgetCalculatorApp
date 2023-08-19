@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BudgetCalculatorApp;
+using DBWrapper;
+using AppContext = DBWrapper.AppContext;
 
 namespace BudgetCalculatorAppUI
 {
@@ -28,21 +24,25 @@ namespace BudgetCalculatorAppUI
         /// </summary>
         private TransactionTypes _chosenType;
 
+        private AppContext Context { set; get; }
+
         /// <summary>
         /// Конструктор вызываемый при создании новой транзакции
         /// </summary>
-        public TransactionDialog()
+        public TransactionDialog(AppContext context)
         {
             InitializeComponent();
+            Context = context;
         }
 
         /// <summary>
-        /// Конструктор вызываемый при изменении существующей конструкции
+        /// Конструктор вызываемый при изменении существующей транзакции
         /// </summary>
         /// <param name="transaction"></param>
-        public TransactionDialog(Transaction transaction)
+        public TransactionDialog(AppContext context, Transaction transaction)
         {
             InitializeComponent();
+            Context = context;
             _editingTransaction = transaction;
             arrivalTypeRadioButton.Checked = (_editingTransaction.Category.Type 
                                              == TransactionTypes.Arrival);
@@ -59,16 +59,21 @@ namespace BudgetCalculatorAppUI
             if (_editingTransaction != null)
             {
                 _editingTransaction.Category.Type = IsTransactionTypeArrival();
-                _editingTransaction.Category.Name = categoryNameTextBox.Text;
+                TransactionCategory category = AppContextExtensions
+                    .GetOrCreateCategory(Context, categoryNameTextBox.Text,
+                        _editingTransaction.Category.Type);
+                _editingTransaction.Category = category;
                 _editingTransaction.Value = double.Parse(valueTextBox.Text);
                 _editingTransaction.DateTime = dateTimePicker.Value.Date;
             }
             else
             {
                 _chosenType = IsTransactionTypeArrival();
-
+                TransactionCategory category = AppContextExtensions
+                    .GetOrCreateCategory(Context, 
+                        categoryNameTextBox.Text, _chosenType);
                 Transaction = new Transaction(
-                    new TransactionCategory(categoryNameTextBox.Text, _chosenType),
+                    category,
                     double.Parse(valueTextBox.Text),
                     dateTimePicker.Value.Date);
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace BudgetCalculatorApp
 {
@@ -85,8 +86,29 @@ namespace BudgetCalculatorApp
         /// <returns>Сумма расходов и приходов пользователя</returns>
         public double Calculate()
         {
-            //TODO: LINQ
-            return 0;
+            double totalArrival = Transactions
+                .Where(t => t.Category.Type == TransactionTypes.Arrival)
+                .Sum(t => t.Value);
+
+            double totalExpense = Transactions
+                .Where(t => t.Category.Type == TransactionTypes.Expense)
+                .Sum(t => t.Value);
+
+            return totalArrival - totalExpense;
+        }
+
+        public double GetTotalArrival()
+        {
+            return Transactions.Where
+                    (t => t.Category.Type == TransactionTypes.Arrival)
+                .Sum(t => t.Value);
+        }
+
+        public double GetTotalExpense()
+        {
+            return Transactions.Where
+                    (t => t.Category.Type == TransactionTypes.Expense)
+                .Sum(t => t.Value);
         }
 
         /// <summary>

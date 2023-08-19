@@ -31,7 +31,7 @@ namespace BudgetCalculatorAppUI
         {
             this.controlPanel = new System.Windows.Forms.Panel();
             this.goBackButton = new System.Windows.Forms.Button();
-            this.ReoirtButton = new System.Windows.Forms.Button();
+            this.ReportButton = new System.Windows.Forms.Button();
             this.entryEditingButton = new System.Windows.Forms.Button();
             this.exitButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
@@ -51,7 +51,7 @@ namespace BudgetCalculatorAppUI
             // 
             this.controlPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.controlPanel.Controls.Add(this.goBackButton);
-            this.controlPanel.Controls.Add(this.ReoirtButton);
+            this.controlPanel.Controls.Add(this.ReportButton);
             this.controlPanel.Controls.Add(this.entryEditingButton);
             this.controlPanel.Controls.Add(this.exitButton);
             this.controlPanel.Controls.Add(this.removeButton);
@@ -80,21 +80,22 @@ namespace BudgetCalculatorAppUI
             this.goBackButton.UseVisualStyleBackColor = true;
             this.goBackButton.Click += new System.EventHandler(this.goBackButton_Click);
             // 
-            // ReoirtButton
+            // ReportButton
             // 
-            this.ReoirtButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ReoirtButton.FlatAppearance.BorderSize = 0;
-            this.ReoirtButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ReoirtButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReoirtButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.ReoirtButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ReoirtButton.Location = new System.Drawing.Point(0, 469);
-            this.ReoirtButton.Name = "ReoirtButton";
-            this.ReoirtButton.Size = new System.Drawing.Size(200, 23);
-            this.ReoirtButton.TabIndex = 6;
-            this.ReoirtButton.Text = "Вывод отчёта";
-            this.ReoirtButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ReoirtButton.UseVisualStyleBackColor = true;
+            this.ReportButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ReportButton.FlatAppearance.BorderSize = 0;
+            this.ReportButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ReportButton.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReportButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ReportButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ReportButton.Location = new System.Drawing.Point(0, 469);
+            this.ReportButton.Name = "ReportButton";
+            this.ReportButton.Size = new System.Drawing.Size(200, 23);
+            this.ReportButton.TabIndex = 6;
+            this.ReportButton.Text = "Вывод отчёта";
+            this.ReportButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ReportButton.UseVisualStyleBackColor = true;
+            this.ReportButton.Click += new System.EventHandler(this.ReportButton_Click);
             // 
             // entryEditingButton
             // 
@@ -255,7 +256,7 @@ namespace BudgetCalculatorAppUI
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button entryEditingButton;
-        private System.Windows.Forms.Button ReoirtButton;
+        private System.Windows.Forms.Button ReportButton;
         private System.Windows.Forms.Button goBackButton;
         private System.Windows.Forms.PictureBox pictureBox1;
     }

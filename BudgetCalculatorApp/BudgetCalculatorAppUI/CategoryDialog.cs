@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BudgetCalculatorApp;
+using DBWrapper;
+using AppContext = DBWrapper.AppContext;
 
 namespace BudgetCalculatorAppUI
 {
@@ -18,16 +13,21 @@ namespace BudgetCalculatorAppUI
         /// </summary>
         private TransactionCategory _editingCategory;
 
+        private AppContext Context { set; get; }
+
+        public TransactionCategory Category { get; set; }
+
         /// <summary>
         /// Конструктор вызываемый при изменении категории
         /// </summary>
-        public CategoryDialog(TransactionCategory category)
+        public CategoryDialog(AppContext context, TransactionCategory category)
         {
             InitializeComponent();
             _editingCategory = category;
             nameTextBox.Text = _editingCategory.Name;
             arrivalTypeRadioButton.Checked = (_editingCategory.Type
                                               == TransactionTypes.Arrival);
+            Context = context;
         }
 
         /// <summary>
@@ -35,16 +35,14 @@ namespace BudgetCalculatorAppUI
         /// </summary>
         private void doneButton_Click(object sender, EventArgs e)
         {
-            if (arrivalTypeRadioButton.Checked)
-            {
-                _editingCategory.Type = TransactionTypes.Arrival;
-            }
-            else
-            {
-                _editingCategory.Type = TransactionTypes.Expense;
-            }
+            var categoryName = nameTextBox.Text;
+            var categoryType = arrivalTypeRadioButton.Checked 
+                ? TransactionTypes.Arrival : TransactionTypes.Expense;
 
-            _editingCategory.Name = nameTextBox.Text;
+            var newOrExistingCategory = AppContextExtensions
+                .GetOrCreateCategory(Context, categoryName, categoryType);
+
+            _editingCategory = newOrExistingCategory;
             DialogResult = DialogResult.OK;
             this.Close();
         }

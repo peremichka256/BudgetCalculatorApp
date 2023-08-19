@@ -51,30 +51,50 @@ namespace BudgetCalculatorAppUI
         {
             if (_currentViewMode == ViewMods.Users)
             {
-                var usersWithTransactionsAndCategories = _context.Users
-                    .Include(u => u.Transactions)
-                    .ThenInclude(t => t.Category) // Включаем связанную категорию для каждой транзакции
-                    .ToList();
-
-                dataGridView.DataSource = usersWithTransactionsAndCategories;
+                dataGridView.DataSource = 
+                    LoadUsersWithTransactionsAndCategories();
             }
             else if (_currentViewMode == ViewMods.Transactions)
             {
-                var transactionsToShow = new List<Transaction>();
-
-                foreach (var transaction in _selectedUser.Transactions)
-                {
-                    transactionsToShow.Add(transaction);
-                }
-
-                dataGridView.DataSource = transactionsToShow;
+                dataGridView.DataSource = LoadTransactionsToShow();
             }
             else if (_currentViewMode == ViewMods.Categories)
             {
-                var categoryToShow = new List<TransactionCategory>
-                    { _selectedTransaction.Category };
-                dataGridView.DataSource = categoryToShow;
+                dataGridView.DataSource = LoadCategoriesToShow();
             }
+        }
+
+        /// <summary>
+        /// Выгружает пользователей из БД
+        /// </summary>
+        /// <returns>Список пользователей</returns>
+        private List<User> LoadUsersWithTransactionsAndCategories()
+        {
+            return _context.Users
+                .Include(u => u.Transactions)
+                .ThenInclude(t => t.Category)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Выгружает транзакции какждого пользователя
+        /// </summary>
+        /// <returns>Список транзакций</returns>
+        private List<Transaction> LoadTransactionsToShow()
+        {
+            return _selectedUser?.Transactions.ToList() 
+                   ?? new List<Transaction>();
+        }
+
+        /// <summary>
+        /// Выгружает категорию транзакции 
+        /// </summary>
+        /// <returns>Список категорий из одного элемента</returns>
+        private List<TransactionCategory> LoadCategoriesToShow()
+        {
+            return _selectedTransaction != null
+                ? new List<TransactionCategory> { _selectedTransaction.Category }
+                : new List<TransactionCategory>();
         }
 
         /// <summary>
@@ -86,29 +106,43 @@ namespace BudgetCalculatorAppUI
         {
             if (_currentViewMode == ViewMods.Users)
             {
-                UserDialog editUserDialog = new UserDialog();
-                DialogResult result = editUserDialog.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    _context.Users.Add(editUserDialog.User);
-                    _context.SaveChanges();
-                    LoadDataFromDatabase();
-                }
+                AddNewUser();
             }
             else if (_currentViewMode == ViewMods.Transactions)
             {
-                TransactionDialog editTransactionDialog = 
-                    new TransactionDialog();
-                DialogResult result = editTransactionDialog.ShowDialog();
+                AddNewTransaction();
+            }
+        }
 
-                if (result == DialogResult.OK)
-                {
-                    _selectedUser.AddTransaction(
-                        editTransactionDialog.Transaction);
-                    _context.SaveChanges();
-                    LoadDataFromDatabase();
-                }
+        /// <summary>
+        /// Добавляет пользователя
+        /// </summary>
+        private void AddNewUser()
+        {
+            UserDialog editUserDialog = new UserDialog();
+            DialogResult result = editUserDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                _context.Users.Add(editUserDialog.User);
+                _context.SaveChanges();
+                LoadDataFromDatabase();
+            }
+        }
+
+        /// <summary>
+        /// Добавляет транзакцию
+        /// </summary>
+        private void AddNewTransaction()
+        {
+            TransactionDialog editTransactionDialog = new TransactionDialog(_context);
+            DialogResult result = editTransactionDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                _selectedUser.AddTransaction(editTransactionDialog.Transaction);
+                _context.SaveChanges();
+                LoadDataFromDatabase();
             }
         }
 
@@ -119,58 +153,58 @@ namespace BudgetCalculatorAppUI
         {
             if (_currentViewMode == ViewMods.Users)
             {
-                if (dataGridView.SelectedCells.Count > 0)
-                {
-                    int selectedRowIndex = dataGridView.SelectedCells[0].RowIndex;
-                    DataGridViewRow selectedRow = 
-                        dataGridView.Rows[selectedRowIndex];
-                    var userToRemove = (User)selectedRow.DataBoundItem;
-                    _context.Users.Remove(userToRemove);
-                    _context.SaveChanges();
-                    LoadDataFromDatabase();
-                }
+                RemoveUser();
             }
             else if (_currentViewMode == ViewMods.Transactions)
             {
-                if (dataGridView.SelectedCells.Count > 0)
-                {
-                    int selectedRowIndex = dataGridView.SelectedCells[0].RowIndex;
-                    DataGridViewRow selectedRow = 
-                        dataGridView.Rows[selectedRowIndex];
-                    var transactionToRemove = 
-                        (Transaction)selectedRow.DataBoundItem;
-                    _selectedUser.RemoveTransaction(transactionToRemove);
-                    _context.Transactions.Remove(transactionToRemove);
-                    _context.SaveChanges();
-                    LoadDataFromDatabase();
-                }
+                RemoveTransaction();
+            }
+        }
+
+        /// <summary>
+        /// Удаляет пользователя
+        /// </summary>
+        private void RemoveUser()
+        {
+            if (dataGridView.SelectedCells.Count > 0)
+            {
+                int selectedRowIndex = dataGridView.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = 
+                    dataGridView.Rows[selectedRowIndex];
+                var userToRemove = (User)selectedRow.DataBoundItem;
+                _context.Users.Remove(userToRemove);
+                _context.SaveChanges();
+                LoadDataFromDatabase();
+            }
+        }
+        
+        /// <summary>
+        /// Удаляет транзакцию
+        /// </summary>
+        private void RemoveTransaction()
+        {
+            if (dataGridView.SelectedCells.Count > 0)
+            {
+                int selectedRowIndex = dataGridView.SelectedCells[0]
+                    .RowIndex;
+                DataGridViewRow selectedRow = dataGridView
+                    .Rows[selectedRowIndex];
+                var transactionToRemove = (Transaction)selectedRow
+                    .DataBoundItem;
+                _selectedUser.RemoveTransaction(transactionToRemove);
+                _context.Transactions.Remove(transactionToRemove);
+                _context.SaveChanges();
+                LoadDataFromDatabase();
             }
         }
 
         /// <summary>
         /// Метод отображающий фамилию и имя выбранного пользователя в углу
         /// </summary>
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellClick(object sender,
+            DataGridViewCellEventArgs e)
         {
-            var selectedRowIndex = e.RowIndex;
-
-            if (selectedRowIndex >= 0 && selectedRowIndex 
-                < dataGridView.Rows.Count)
-            {
-                DataGridViewRow selectedRow = dataGridView.Rows[selectedRowIndex]; 
-                selectedRow.Selected = true;
-
-                if (_currentViewMode == ViewMods.Users)
-                {
-                    _selectedUser = (User)selectedRow.DataBoundItem;
-                    userFirstnameLabel.Text = $"{_selectedUser.Firstname} {_selectedUser.Surname}";
-                    userDataLabel.Text = $"Родился {_selectedUser.BirthDate.ToString("dd.MM.yyyy")}";
-                }
-                else if (_currentViewMode == ViewMods.Transactions)
-                {
-                    _selectedTransaction = (Transaction)selectedRow.DataBoundItem;
-                }
-            }
+            HandleDataGridViewCellClick(e.RowIndex);
         }
 
         /// <summary>
@@ -179,24 +213,59 @@ namespace BudgetCalculatorAppUI
         private void dataGridView_CellDoubleClick(object sender,
             DataGridViewCellEventArgs e)
         {
-            var selectedRowIndex = e.RowIndex;
+            HandleDataGridViewCellClick(e.RowIndex);
+            HandleDoubleClickNavigation();
+        }
 
-            if (selectedRowIndex >= 0 && selectedRowIndex 
-                < dataGridView.Rows.Count)
+        /// <summary>
+        /// Запоминает выбранный элемент и подсвечивает всю строку
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        private void HandleDataGridViewCellClick(int rowIndex)
+        {
+            if (rowIndex >= 0 && rowIndex < dataGridView.Rows.Count)
             {
-                DataGridViewRow selectedRow = dataGridView.Rows[selectedRowIndex];
+                DataGridViewRow selectedRow = dataGridView.Rows[rowIndex];
+                selectedRow.Selected = true;
 
                 if (_currentViewMode == ViewMods.Users)
                 {
                     _selectedUser = (User)selectedRow.DataBoundItem;
-                    SwitchViewMode(ViewMods.Transactions);
+                    UpdateUserLabels();
                 }
                 else if (_currentViewMode == ViewMods.Transactions)
                 {
-                    _selectedTransaction = (Transaction)selectedRow.DataBoundItem;
-                    SwitchViewMode(ViewMods.Categories);
+                    _selectedTransaction = (Transaction)selectedRow
+                        .DataBoundItem;
                 }
             }
+        }
+
+        /// <summary>
+        /// Переводит работу в необходимый режим
+        /// </summary>
+        private void HandleDoubleClickNavigation()
+        {
+            if (_currentViewMode == ViewMods.Users && _selectedUser != null)
+            {
+                SwitchViewMode(ViewMods.Transactions);
+            }
+            else if (_currentViewMode == ViewMods.Transactions 
+                     && _selectedTransaction != null)
+            {
+                SwitchViewMode(ViewMods.Categories);
+            }
+        }
+
+        /// <summary>
+        /// Обновляет информацию о выбранном пользователе в углу
+        /// </summary>
+        private void UpdateUserLabels()
+        {
+            userFirstnameLabel.Text = 
+                $"{_selectedUser.Firstname} {_selectedUser.Surname}";
+            userDataLabel.Text = 
+                $"Родился {_selectedUser.BirthDate.ToString("dd.MM.yyyy")}";
         }
 
         /// <summary>
@@ -257,6 +326,7 @@ namespace BudgetCalculatorAppUI
             addButton.Visible = true;
             removeButton.Visible = true;
             goBackButton.Visible = true;
+            entryEditingButton.Visible = true;
             dataGridView.DataSource = null;
             _currentViewMode = ViewMods.Transactions;
             LoadDataFromDatabase();
@@ -265,11 +335,11 @@ namespace BudgetCalculatorAppUI
         /// <summary>
         /// Метод переводящий работу в режим просмотра категории транзакции
         /// </summary>
-        /// <param name="transaction"></param>
         private void SwitchToCategoriesViewMode()
         {
             addButton.Visible = false;
             removeButton.Visible = false;
+            entryEditingButton.Visible = false;
             dataGridView.DataSource = null;
             _currentViewMode = ViewMods.Categories;
             var categoryToShow = 
@@ -282,48 +352,48 @@ namespace BudgetCalculatorAppUI
         /// </summary>
         private void entryEditingButton_Click(object sender, EventArgs e)
         {
-            if (_currentViewMode == ViewMods.Users)
+            if (_currentViewMode == ViewMods.Users && _selectedUser != null)
             {
-                if (_selectedUser != null)
-                {
-                    UserDialog editUserDialog = new UserDialog(_selectedUser);
-                    DialogResult result = editUserDialog.ShowDialog();
+                EditUser();
+            }
+            else if (_currentViewMode == ViewMods.Transactions 
+                     && _selectedTransaction != null)
+            {
+                EditTransaction();
+            }
+        }
 
-                    if (result == DialogResult.OK)
-                    {
-                        _context.SaveChanges();
-                        LoadDataFromDatabase();
-                    }
+        /// <summary>
+        /// Редактирует пользоватея
+        /// </summary>
+        private void EditUser()
+        {
+            using (var editUserDialog = new UserDialog(_selectedUser))
+            {
+                DialogResult result = editUserDialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    _context.SaveChanges();
+                    LoadDataFromDatabase();
                 }
             }
-            else if (_currentViewMode == ViewMods.Transactions)
-            {
-                if (_selectedTransaction != null)
-                {
-                    TransactionDialog editTransactionDialog 
-                        = new TransactionDialog(_selectedTransaction);
-                    DialogResult result = editTransactionDialog.ShowDialog();
+        }
 
-                    if (result == DialogResult.OK)
-                    {
-                        _context.SaveChanges();
-                        LoadDataFromDatabase();
-                    }
-                }
-            }
-            else if (_currentViewMode == ViewMods.Categories)
+        /// <summary>
+        /// Редактирует трназакцию
+        /// </summary>
+        private void EditTransaction()
+        {
+            using (var editTransactionDialog = 
+                   new TransactionDialog(_context, _selectedTransaction))
             {
-                if (_selectedTransaction != null)
-                {
-                    CategoryDialog editCategoryDialog 
-                        = new CategoryDialog(_selectedTransaction.Category);
-                    DialogResult result = editCategoryDialog.ShowDialog();
+                DialogResult result = editTransactionDialog.ShowDialog();
 
-                    if (result == DialogResult.OK)
-                    {
-                        _context.SaveChanges();
-                        LoadDataFromDatabase();
-                    }
+                if (result == DialogResult.OK)
+                {
+                    _context.SaveChanges();
+                    LoadDataFromDatabase();
                 }
             }
         }
@@ -334,6 +404,29 @@ namespace BudgetCalculatorAppUI
         private void exitButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Выводит финансовый отчёт
+        /// </summary>
+        private void ReportButton_Click(object sender, EventArgs e)
+        {
+            if (_selectedUser != null)
+            {
+                double userBalance = _selectedUser.Calculate();
+
+                string reportMessage = $"Финансовый отчёт для пользователя " +
+                                       $"{_selectedUser.Firstname}" +
+                                       $" {_selectedUser.Surname}:\n";
+                reportMessage += $"Всего приходов: " +
+                                 $"{_selectedUser.GetTotalArrival():F2}\n";
+                reportMessage += $"Всего расходов: " +
+                                 $"{_selectedUser.GetTotalExpense():F2}\n";
+                reportMessage += $"Итоговый баланс: {userBalance:F2}";
+
+                MessageBox.Show(reportMessage, "Финансовый отчёт",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
