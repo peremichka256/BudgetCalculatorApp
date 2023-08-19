@@ -84,19 +84,15 @@ namespace BudgetCalculatorApp
         /// Метод расчитывающий итоговый вклад пользователя в бюджет
         /// </summary>
         /// <returns>Сумма расходов и приходов пользователя</returns>
-        public double Calculate()
+        public double GetTotalSum()
         {
-            double totalArrival = Transactions
-                .Where(t => t.Category.Type == TransactionTypes.Arrival)
-                .Sum(t => t.Value);
-
-            double totalExpense = Transactions
-                .Where(t => t.Category.Type == TransactionTypes.Expense)
-                .Sum(t => t.Value);
-
-            return totalArrival - totalExpense;
+            return GetTotalArrival() - GetTotalExpense();
         }
 
+        /// <summary>
+        /// Возвращает сумму всех приходных транзакций
+        /// </summary>
+        /// <returns>Сумма прихода</returns>
         public double GetTotalArrival()
         {
             return Transactions.Where
@@ -104,6 +100,10 @@ namespace BudgetCalculatorApp
                 .Sum(t => t.Value);
         }
 
+        /// <summary>
+        /// Возвращает сумму всех расходных транзакий
+        /// </summary>
+        /// <returns>Сумма расхода</returns>
         public double GetTotalExpense()
         {
             return Transactions.Where
@@ -124,9 +124,13 @@ namespace BudgetCalculatorApp
             BirthDate = birthDate;
         }
 
+        /// <summary>
+        /// Возвращает имя и фамилию пользователя
+        /// </summary>
+        /// <returns>Строка с именем и фамилией</returns>
         public override string ToString()
         {
-            return $"{Firstname} {Surname}"; // Вернуть полное имя пользователя
+            return $"{Firstname} {Surname}";
         }
     }
 }

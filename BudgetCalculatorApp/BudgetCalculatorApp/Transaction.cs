@@ -107,7 +107,6 @@ namespace BudgetCalculatorApp
         /// </summary>
         public Transaction()
         {
-
         }
     }
 }

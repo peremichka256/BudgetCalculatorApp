@@ -413,7 +413,7 @@ namespace BudgetCalculatorAppUI
         {
             if (_selectedUser != null)
             {
-                double userBalance = _selectedUser.Calculate();
+                double userBalance = _selectedUser.GetTotalSum();
 
                 string reportMessage = $"Финансовый отчёт для пользователя " +
                                        $"{_selectedUser.Firstname}" +

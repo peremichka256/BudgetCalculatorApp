@@ -56,6 +56,10 @@ namespace BudgetCalculatorApp
             Type = type;
         }
 
+        /// <summary>
+        /// Возвращает название категории
+        /// </summary>
+        /// <returns>Название категории</returns>
         public override string ToString()
         {
             return Name;
