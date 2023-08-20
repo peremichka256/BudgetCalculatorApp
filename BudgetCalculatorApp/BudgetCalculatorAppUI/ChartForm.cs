@@ -17,9 +17,19 @@ namespace BudgetCalculatorAppUI
         /// Поле хранящее контекст БД
         /// </summary>
         private AppContext _context;
+
+        /// Поле хранящее доходы всех пользователей
         private double _totalArrival;
+
+        /// <summary>
+        /// Поле хранящее расходы всех пользователей
+        /// </summary>
         private double _totalExpense;
 
+        /// <summary>
+        /// Конструктор формы с финальным отчётом
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public ChartForm(AppContext context)
         {
             InitializeComponent();
@@ -53,42 +63,53 @@ namespace BudgetCalculatorAppUI
                                     $"{_totalArrival - _totalExpense:F2}";
 
 
-            var mostExpensiveCategory = _context.TransactionCategories
+            var mostExpensiveCategory = 
+                _context.TransactionCategories
                 .Select(category => new
                 {
                     Category = category,
                     TotalExpense = _context.Transactions
-                        .Where(transaction => transaction.CategoryId == category.Id)
+                        .Where(transaction => transaction.CategoryId 
+                                              == category.Id)
                         .Sum(transaction => transaction.Category.Type
                                             == TransactionTypes.Expense
                             ? transaction.Value
                             : 0)
                 })
-                .OrderByDescending(item => item.TotalExpense)
+                .OrderByDescending(item 
+                    => item.TotalExpense)
                 .FirstOrDefault();
 
-            mostPopularCategoryLabel.Text = $"Категория с наибольшими расходами: " +
-                                            $"{mostExpensiveCategory.Category.Name}\n" +
-                                            $"Сумма расходов: {mostExpensiveCategory.TotalExpense:F2}";
+            mostPopularCategoryLabel.Text = 
+                $"Категория с наибольшими расходами: " +
+                $"{mostExpensiveCategory.Category.Name}\n" +
+                $"Сумма расходов: {mostExpensiveCategory.TotalExpense:F2}";
         }
 
+        /// <summary>
+        /// Рисует столбчатый график с категорями
+        /// </summary>
         private void DrawFirstChart()
         {
-            List<CategoryExpense> categoryExpenses = _context.TransactionCategories
+            List<CategoryExpense> categoryExpenses = 
+                _context.TransactionCategories
                 .Select(category => new CategoryExpense
                 {
                     CategoryName = category.Name,
                     TotalExpense = _context.Transactions
-                        .Where(transaction => transaction.CategoryId == category.Id && transaction.Category.Type == TransactionTypes.Expense)
+                        .Where(transaction => transaction.CategoryId 
+                            == category.Id && transaction.Category.Type 
+                            == TransactionTypes.Expense)
                         .Sum(transaction => transaction.Value)
                 })
                 .ToList();
 
-            chart1.Series["Expenses"].Points.Clear(); // Очистка данных перед добавлением новых
+            chart1.Series["Expenses"].Points.Clear();
 
             foreach (var categoryExpense in categoryExpenses)
             {
-                chart1.Series["Expenses"].Points.AddXY(categoryExpense.CategoryName, categoryExpense.TotalExpense);
+                chart1.Series["Expenses"].Points.AddXY(categoryExpense
+                    .CategoryName, categoryExpense.TotalExpense);
             }
 
             chart1.Series["Expenses"].IsValueShownAsLabel = true;
@@ -97,12 +118,13 @@ namespace BudgetCalculatorAppUI
             chart1.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
             chart1.ChartAreas[0].AxisX.Interval = 1;
 
-            // Добавление подписи к оси Y
             chart1.ChartAreas[0].AxisY.Title = "Сумма";
-            // Добавление заголовка к графику
             chart1.Titles.Add("Расходы и доходы по категориям");
         }
 
+        /// <summary>
+        /// Рисует круговую диаграмму с долей расхода и прихода
+        /// </summary>
         private void DrawSecondChart()
         {
             List<ExpenseIncome> expenseIncomes = new List<ExpenseIncome>
@@ -111,19 +133,20 @@ namespace BudgetCalculatorAppUI
                 new ExpenseIncome { Label = "Доходы", Value = _totalArrival }
             };
 
-            chart2.Series["ExpensesIncomes"].Points.Clear(); // Очистка данных перед добавлением новых
+            chart2.Series["ExpensesIncomes"].Points.Clear();
 
             foreach (var expenseIncome in expenseIncomes)
             {
-                chart2.Series["ExpensesIncomes"].Points.AddXY(expenseIncome.Label, expenseIncome.Value);
+                chart2.Series["ExpensesIncomes"].Points
+                    .AddXY(expenseIncome.Label, expenseIncome.Value);
             }
 
             chart2.Series["ExpensesIncomes"].Label = "#PERCENT{P0}";
-            chart2.Series["ExpensesIncomes"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            chart2.Series["ExpensesIncomes"].ChartType = System.Windows.Forms
+                .DataVisualization.Charting.SeriesChartType.Pie;
 
             chart2.Legends[0].Enabled = true;
             chart2.Legends[0].Alignment = StringAlignment.Center;
-            // Добавление заголовка к графику
             chart2.Titles.Add("Соотношение расходов и доходов");
         }
     }

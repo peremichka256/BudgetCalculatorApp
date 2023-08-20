@@ -40,6 +40,10 @@ namespace DBWrapper
             optionsBuilder.UseNpgsql(CONNECTION_STRING);
         }
 
+        /// <summary>
+        /// Определяет связи между таблицами
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
